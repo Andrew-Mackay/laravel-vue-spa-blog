@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Running unit tests and checking PSR2 compliance..."
+c=laradock_workspace_1
+docker exec -t $c bash -ic "cd /var/www && ./vendor/bin/phpunit && ./vendor/bin/phpcs -n --standard=PSR2 --colors app/ --report=diff app/"

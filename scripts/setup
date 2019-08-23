@@ -1,0 +1,5 @@
+#!/bin/bash
+code ~/code/k_blog # open project in editor
+cd ~/code/k_blog/laradock
+docker-compose up -d nginx mysql # launch container
+docker-compose exec --user=laradock workspace bash # open workspace
