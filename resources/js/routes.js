@@ -5,6 +5,7 @@ import Home from '@/js/components/Home';
 import About from '@/js/components/About';
 import Post from '@/js/components/Post';
 import CreatePost from '@/js/components/CreatePost';
+import Login from '@/js/components/Login';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,9 @@ const router = new VueRouter({
     },
     {
       path: '/about', name: 'about', component: About
+    },
+    {
+      path: '/login', name: 'login', component: Login
     },
     {
       path: '/post/new', name: 'createPost', component: CreatePost
