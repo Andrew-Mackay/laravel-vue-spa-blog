@@ -1,13 +1,26 @@
 <template>
   <div id="post-container">
     <img id="header-image" :src="post.headerImage"/>
-    <div id="post-title">{{ post.title }} - {{ post.id }}</div>
+    <div id="post-title">{{ post.title }}</div>
     <div id="post-summary">{{ post.summary }}</div>
-    <div id="post-content">{{ post.content }} </div>
+    <div v-if="!previewMode" id="post-content">{{ post.content }} </div>
+    <div v-else v-html="post.content"></div>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    previewMode: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    previewPost: {
+      type: Object,
+      required: false,
+      default: {}
+    }
+  },
   data() {
     return {
       post: {
@@ -22,10 +35,18 @@ export default {
     }
   },
   mounted() {
-    console.log('Component mounted.', this.$route.params.id)
-    this.post.id = this.$route.params.id;
+    if(!this.previewMode) {
+      console.log('Component mounted.', this.$route.params.id)
+      this.post.id = this.$route.params.id;
+    } else {
+      this.post = this.previewPost
+    }
+  },
+  watch: { 
+    previewPost (newPost) {
+      this.post = newPost
+    }
   }
-  
 }
 </script>
 <style scoped>

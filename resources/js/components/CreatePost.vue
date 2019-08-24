@@ -1,42 +1,61 @@
 <template>
 <div id="editor">
-  <textarea v-model='content'></textarea>
-  <div v-html="compiledMarkdown"></div>
+  <input v-model="title" placeholder="title"> <br/>
+  <textarea v-model="summary" placeholder="summary"></textarea><br/>
+  <textarea v-model="content" placeholder="blog post"></textarea> <br/>
+  <button @click="showPreview = !showPreview" v-text="showPreview ? 'Hide Preview': 'Show Preview'">Preview</button>
+  <hr v-if=showPreview />
+  <post v-if=showPreview :previewMode="true" :previewPost="previewPostObject"></post>
 </div>
 </template>
 <script>
 import marked from 'marked';
+import Post from '@/js/components/Post'
 export default {
+  components: {Post},
   data() {
     return {
-      content: ''
+      title: "",
+      headerImage: "",
+      summary: "",
+      content: "",
+
+      showPreview: false
     }
   },
   computed: {
     compiledMarkdown() {
-      return marked(this.content, {sanitize:true})
+      return marked(this.content)
+    },
+    previewPostObject() {
+      return {
+        "title": this.title,
+        "headerImage": this.headerImage,
+        "summary": this.summary,
+        "content": this.compiledMarkdown
+      }
     }
   },
 }
 </script>
 <style scoped>
-html, body, #editor {
+/* html, body, #editor {
   margin: 0;
   height: 100%;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #333;
-}
+} */
 
-textarea, #editor div {
+/* textarea, #editor div {
   display: inline-block;
   width: 49%;
   height: 100%;
   vertical-align: top;
   box-sizing: border-box;
   padding: 0 20px;
-}
+} */
 
-textarea {
+/* textarea {
   border: none;
   border-right: 1px solid #ccc;
   resize: none;
@@ -45,9 +64,9 @@ textarea {
   font-size: 14px;
   font-family: 'Monaco', courier, monospace;
   padding: 20px;
-}
+} */
 
-code {
+/* code {
   color: #f66;
-}
+} */
 </style>
