@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div id="post-container">
+    <img id="header-image" :src="post.headerImage"/>
+    <div id="post-title">{{ post.title }} - {{ post.id }}</div>
+    <div id="post-summary">{{ post.summary }}</div>
+    <div id="post-content">{{ post.content }} </div>
   </div>
 </template>
 <script>
@@ -18,11 +22,32 @@ export default {
     }
   },
   mounted() {
-    console.log('Component mounted.')
+    console.log('Component mounted.', this.$route.params.id)
+    this.post.id = this.$route.params.id;
   }
   
 }
 </script>
 <style scoped>
-
+  #post-container {
+    padding: 40px 0px ;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  header-image {
+    max-width: 100%;
+    height: auto;
+  }
+  #post-title {
+    font-weight: bold;
+    font-size: 30px;
+  }
+  #post-summary {
+    font-style: italic;
+  }
+  #post-content {
+    
+  }
 </style>

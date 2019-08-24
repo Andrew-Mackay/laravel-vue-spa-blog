@@ -1,6 +1,5 @@
 <template>
     <div>
-      Home Component
       <div v-for="postPreview in postPreviews" v-bind:key="postPreview.id">
         <post-preview :preview=postPreview></post-preview>
         <hr/>

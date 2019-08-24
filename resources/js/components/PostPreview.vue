@@ -1,9 +1,11 @@
 <template>
-  <div id="preview-container">
+<router-link :to=postLink>
+  <div id="preview-container" @click="openPost">
     <img :src="preview.headerImage"/>
     <div id="preview-title">{{ preview.title }}</div>
     <div id="preview-summary">{{ preview.summary }}</div>
   </div>
+</router-link>
 </template>
 <script>
 export default {
@@ -13,6 +15,16 @@ export default {
       required: true
     }
   },
+  methods: {
+    openPost(){
+      console.log("open post");
+    }
+  },
+  computed: {
+    postLink() {
+      return {path: "/post/" + this.preview.id}
+    }
+  }
 }
 </script>
 <style scoped>
@@ -22,6 +34,7 @@ export default {
     align-content: center;
     flex-direction: column;
     align-items: center;
+    
   }
   img {
     max-width: 100%;
