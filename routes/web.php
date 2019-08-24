@@ -11,6 +11,6 @@
 |
 */
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/{any}', 'SinglePageController@index')->where('any', '.*');

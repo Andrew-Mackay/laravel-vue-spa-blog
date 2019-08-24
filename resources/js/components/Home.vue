@@ -9,6 +9,7 @@
 
 <script>
 import PostPreview from '@/js/components/PostPreview.vue'
+import { constants } from 'crypto';
 export default {
   components: {PostPreview},
   data() {
@@ -43,6 +44,7 @@ export default {
   },
   mounted() {
       console.log('Component mounted.')
+      console.log('Logged in?', isLoggedIn)
   }
 }
 </script>
