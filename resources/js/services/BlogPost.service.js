@@ -1,4 +1,4 @@
-const blogPostURL = '/api/post';
+const blogPostURL = '/api/blog-post';
 export default class BlogPost {
   static getAuthHeader() {
     let token = localStorage.getItem('user-token') || '';
@@ -10,7 +10,6 @@ export default class BlogPost {
   }
 
   static createPost(post) {
-    // todo parse params 
     return axios.post(
       blogPostURL,
       {

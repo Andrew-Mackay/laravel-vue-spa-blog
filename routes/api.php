@@ -28,5 +28,15 @@ Route::group([
   Route::post('logout', 'AuthController@logout');
   Route::post('refresh', 'AuthController@refresh');
   Route::post('me', 'AuthController@me');
+});
 
+Route::group([
+
+  'middleware' => 'api',
+  'prefix' => 'blog-post'
+
+], function ($router) {
+  Route::post('', 'BlogPostController@store');
+  Route::put('', 'BlogPostController@update');
+  Route::delete('', 'BlogPostController@destroy');
 });

@@ -3,6 +3,7 @@
   <input v-model="title" placeholder="title"> <br/>
   <textarea v-model="summary" placeholder="summary"></textarea><br/>
   <textarea v-model="content" placeholder="blog post"></textarea> <br/>
+  <button @click="createPost">Save</button>
   <button @click="showPreview = !showPreview" v-text="showPreview ? 'Hide Preview': 'Show Preview'">Preview</button>
   <hr v-if=showPreview />
   <post v-if=showPreview :previewMode="true" :previewPost="previewPostObject"></post>
@@ -45,7 +46,14 @@ export default {
         summary: this.summary,
         content: this.content
       }
-      response = await BlogPost.createPost(post)
+      try {
+        response = await BlogPost.createPost(post);
+        if(response.status === 200) {
+          router.push({name: 'post', params: {id: response.data.id}});
+        }
+      }catch(error){
+        console.log("Error:", error)
+      }
     }
   }
 }
