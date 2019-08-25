@@ -9,8 +9,10 @@
 </div>
 </template>
 <script>
+import BlogPost from '@/js/services/BlogPost.service.js'
 import marked from 'marked';
 import Post from '@/js/components/Post'
+
 export default {
   components: {Post},
   data() {
@@ -36,6 +38,16 @@ export default {
       }
     }
   },
+  methods: {
+    async createPost() {
+      let post = {
+        title: this.title,
+        summary: this.summary,
+        content: this.content
+      }
+      response = await BlogPost.createPost(post)
+    }
+  }
 }
 </script>
 <style scoped>

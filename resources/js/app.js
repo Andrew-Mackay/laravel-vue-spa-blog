@@ -32,7 +32,7 @@ import App from '@/js/components/App';
 
 const app = new Vue({
     el: '#app',
-    components: {App},
+    render: h => h(App),
     router: Routes,
 });
 
