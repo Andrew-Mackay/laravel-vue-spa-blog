@@ -68,7 +68,7 @@ export default {
     flex-direction: column;
     align-items: center;
   }
-  header-image {
+  #header-image {
     max-width: 100%;
     height: auto;
   }

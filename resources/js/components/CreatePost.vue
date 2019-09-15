@@ -6,7 +6,6 @@
     <br />
     <textarea v-model="content" placeholder="blog post"></textarea>
     <br />
-
     <vue-upload-multiple-image
       @upload-success="uploadImageSuccess"
       @before-remove="beforeRemove"
@@ -50,7 +49,7 @@ export default {
       images: [],
       IMAGE_TYPES_ACCEPTED:
         "image/gif,image/jpeg,image/png,image/bmp,image/jpg",
-      MAX_NUMBER_OF_IMAGES: 30
+      MAX_NUMBER_OF_IMAGES: 30,
     };
   },
   computed: {
@@ -82,10 +81,17 @@ export default {
         console.log("Error:", error);
       }
     },
-    uploadImageSuccess() {},
-    beforeRemove() {},
-    editImage() {},
-    markIsHeader() {}
+    uploadImageSuccess(formData, index, fileList) {
+      // set header image if not already set
+      if(this.headerImage.length == 0) {
+        this.headerImage = fileList[0].path;
+      }
+    },
+    beforeRemove(index, done, fileList) {},
+    editImage(formData, index, fileList) {},
+    markIsHeader(index, fileList) {
+      this.headerImage = fileList[0].path;
+    }
   }
 };
 </script>
