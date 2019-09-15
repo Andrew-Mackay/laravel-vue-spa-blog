@@ -1,10 +1,10 @@
 <template>
 <div>
-  <div v-if="loaded" id="post-container">
+  <div v-if="loaded || previewMode" id="post-container">
     <img id="header-image" :src="post.headerImage"/>
     <div id="post-title">{{ post.title }}</div>
     <div id="post-summary">{{ post.summary }}</div>
-    <div id="post-content" v-html="compiledContent"></div>
+    <div id="post-content" v-html="post.content"></div>
   </div>
   <div v-else>
     loading...
@@ -13,7 +13,6 @@
 </template>
 <script>
 import BlogPost from '@/js/services/BlogPost.service.js';
-import marked from 'marked';
 
 export default {
   props: {
@@ -25,7 +24,7 @@ export default {
     previewPost: {
       type: Object,
       required: false,
-      default: {}
+      default: () => ({})
     }
   },
   data() {
@@ -39,11 +38,6 @@ export default {
       this.getPost(this.$route.params.id)
     } else {
       this.post = this.previewPost
-    }
-  },
-  computed: {
-    compiledContent() {
-      return marked(this.post.content)
     }
   },
   watch: { 

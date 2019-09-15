@@ -11,6 +11,7 @@
 </template>
 <script>
 import BlogPost from '@/js/services/BlogPost.service.js';
+import marked from 'marked';
 import Post from '@/js/components/Post';
 
 export default {
@@ -31,8 +32,11 @@ export default {
         "title": this.title,
         "headerImage": this.headerImage,
         "summary": this.summary,
-        "content": this.content
+        "content": this.compiledContent
       }
+    },
+    compiledContent() {
+      return marked(this.content)
     }
   },
   methods: {
@@ -40,12 +44,12 @@ export default {
       let post = {
         title: this.title,
         summary: this.summary,
-        content: this.content
+        content: this.compiledContent
       }
       try {
-        response = await BlogPost.createPost(post);
+        let response = await BlogPost.createPost(post);
         if(response.status === 200) {
-          router.push({name: 'post', params: {id: response.data.id}});
+          this.$router.push({name: 'post', params: {id: response.data.id}});
         }
       }catch(error){
         console.log("Error:", error)
