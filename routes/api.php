@@ -35,8 +35,8 @@ Route::group([
   'prefix' => 'blog-post'
 
 ], function ($router) {
-  Route::get('', 'BlogPostController@show');
   Route::get('index', 'BlogPostController@index');
+  Route::get('{postId}', 'BlogPostController@show');
 });
 
 Route::group([

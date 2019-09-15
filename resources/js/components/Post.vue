@@ -1,13 +1,20 @@
 <template>
-  <div id="post-container">
+<div>
+  <div v-if="loaded" id="post-container">
     <img id="header-image" :src="post.headerImage"/>
     <div id="post-title">{{ post.title }}</div>
     <div id="post-summary">{{ post.summary }}</div>
-    <div v-if="!previewMode" id="post-content">{{ post.content }} </div>
-    <div v-else v-html="post.content"></div>
+    <div id="post-content" v-html="compiledContent"></div>
   </div>
+  <div v-else>
+    loading...
+  </div>
+</div>
 </template>
 <script>
+import BlogPost from '@/js/services/BlogPost.service.js';
+import marked from 'marked';
+
 export default {
   props: {
     previewMode: {
@@ -23,28 +30,38 @@ export default {
   },
   data() {
     return {
-      post: {
-        id: "0",
-        title: "Title",
-        summary: "Summary",
-        headerImage: "https://assets.pernod-ricard.com/nz/media_images/test.jpg",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        createdAt: "24 August 2019 - 09:19",
-        lastEdited: "24 August 2019 - 0920"
-      }
+      post: {},
+      loaded: false
     }
   },
   mounted() {
     if(!this.previewMode) {
-      console.log('Component mounted.', this.$route.params.id)
-      this.post.id = this.$route.params.id;
+      this.getPost(this.$route.params.id)
     } else {
       this.post = this.previewPost
+    }
+  },
+  computed: {
+    compiledContent() {
+      return marked(this.post.content)
     }
   },
   watch: { 
     previewPost (newPost) {
       this.post = newPost
+    }
+  },
+  methods: {
+    async getPost(id) {
+      try {
+        let response = await BlogPost.getPost(id);
+        if(response.status === 200) {
+          this.post = response.data;
+        }
+      }catch(error){
+        console.log("Error:", error)
+      }
+      this.loaded = true;
     }
   }
 }

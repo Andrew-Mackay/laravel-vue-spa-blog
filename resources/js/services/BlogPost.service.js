@@ -9,7 +9,7 @@ export default class BlogPost {
   }
 
   static getPost(id) {
-    return axios.get(blogPostURL, { params: { id: id } });
+    return axios.get(blogPostURL + '/' + id);
   }
 
   static createPost(post) {

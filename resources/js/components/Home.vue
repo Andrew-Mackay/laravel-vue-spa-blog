@@ -25,16 +25,13 @@ export default {
     }
   },
   mounted() {
-      console.log('Component mounted 5.')
       this.getPostPreviews();
   },
   methods: {
     async getPostPreviews() {
-      console.log("getting posts");
       try {
         let response = await BlogPost.getPosts();
         if(response.status === 200) {
-          console.log(response.data);
           this.postPreviews = response.data.posts;
         }
       }catch(error){

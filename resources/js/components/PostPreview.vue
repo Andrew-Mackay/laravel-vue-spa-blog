@@ -1,6 +1,6 @@
 <template>
 <router-link :to=postLink>
-  <div id="preview-container" @click="openPost">
+  <div id="preview-container">
     <img :src="preview.headerImage"/>
     <div id="preview-title">{{ preview.title }}</div>
     <div id="preview-summary">{{ preview.summary }}</div>
@@ -13,11 +13,6 @@ export default {
     preview: {
       type: Object,
       required: true
-    }
-  },
-  methods: {
-    openPost(){
-      console.log("open post");
     }
   },
   computed: {

@@ -60,9 +60,12 @@ class BlogPostController extends Controller
      * @param  \App\BlogPost  $blogPost
      * @return \Illuminate\Http\Response
      */
-    public function show(BlogPost $blogPost)
+    public function show(BlogPost $blogPost, int $postId)
     {
-        //
+      // todo test fail condition
+      // todo limit what is returned
+      $post = BlogPost::findOrFail($postId);
+      return response()->json($post);
     }
 
     /**

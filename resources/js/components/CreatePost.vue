@@ -11,7 +11,6 @@
 </template>
 <script>
 import BlogPost from '@/js/services/BlogPost.service.js';
-import marked from 'marked';
 import Post from '@/js/components/Post';
 
 export default {
@@ -27,15 +26,12 @@ export default {
     }
   },
   computed: {
-    compiledMarkdown() {
-      return marked(this.content)
-    },
     previewPostObject() {
       return {
         "title": this.title,
         "headerImage": this.headerImage,
         "summary": this.summary,
-        "content": this.compiledMarkdown
+        "content": this.content
       }
     }
   },
