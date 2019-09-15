@@ -1,7 +1,8 @@
 <template>
   <div>
     <div>
-      isLoggedIn? {{isLoggedIn}}
+      isLoggedIn? {{ isLoggedIn }} <br/>
+      hasExpired? {{ tokenExpired }}
     </div>
     <router-link tag="li" to="/">Home</router-link>
     <router-link tag="li" to="/about">About</router-link>
@@ -11,11 +12,18 @@
 
 </template>
 <script>
+import moment from 'moment';
 export default {
   data() {
     return {
-      // todo add check for is expired
-      isLoggedIn: localStorage.getItem('user-token') != null
+      isLoggedIn: localStorage.getItem('user-token') != null,
+    }
+  },
+  computed: {
+    // Check if the current logged in user's JWT has expired
+    tokenExpired() {
+      let userTokenExpires = localStorage.getItem('user-token-expires');
+      return moment(userTokenExpires).isBefore(moment.utc());
     }
   }
 }

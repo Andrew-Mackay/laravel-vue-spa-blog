@@ -10,9 +10,9 @@
 </div>
 </template>
 <script>
-import BlogPost from '@/js/services/BlogPost.service.js'
+import BlogPost from '@/js/services/BlogPost.service.js';
 import marked from 'marked';
-import Post from '@/js/components/Post'
+import Post from '@/js/components/Post';
 
 export default {
   components: {Post},

@@ -1,32 +1,33 @@
 <template>
   <div>
     Login: <br/>
-    Username: <input v-model="username" placeholder="username"> <br/>
+    Email: <input v-model="email" placeholder="email"> <br/>
     Password: <input v-model="password" type=password> <br/>
     <button @click="login">Login</button>
   </div>
 </template>
 <script>
-import Authentication from '@/js/services/Authentication.service.js'
+import Authentication from '@/js/services/Authentication.service.js';
+import moment from 'moment';
 export default {
   data() {
     return {
-      username: "",
+      email: "",
       password: ""
     }
   },
   methods: {
     async login() {
       try {
-        let response = await Authentication.login(this.username, this.password);
+        let response = await Authentication.login(this.email, this.password);
         if(response.status === 200) {
           const token = response.data.access_token;
           localStorage.setItem('user-token', token);
+          const timeUntilTokenExpiration = response.data.expires_in;
+          const expires = moment.utc().add(timeUntilTokenExpiration, 'seconds');
+          localStorage.setItem('user-token-expires', expires.format());
           window.location.replace('/post/new');
-          // todo store when jwt will expire
-          // response.data.expires_in
         }
-        console.log(response);
       } catch(error){
         console.log("Error:", error)
       }

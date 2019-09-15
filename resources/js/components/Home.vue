@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import PostPreview from '@/js/components/PostPreview.vue'
+import PostPreview from '@/js/components/PostPreview.vue';
 import { constants } from 'crypto';
 export default {
   components: {PostPreview},
