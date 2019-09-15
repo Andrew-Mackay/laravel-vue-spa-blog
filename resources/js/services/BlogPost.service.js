@@ -4,6 +4,9 @@ export default class BlogPost {
     let token = localStorage.getItem('user-token') || '';
     return {Authorization: 'Bearer ' + token};
   }
+  static getPosts() {
+    return axios.get(blogPostURL + '/index');
+  }
 
   static getPost(id) {
     return axios.get(blogPostURL, { params: { id: id } });

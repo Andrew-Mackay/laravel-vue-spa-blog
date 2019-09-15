@@ -32,6 +32,15 @@ Route::group([
 
 Route::group([
 
+  'prefix' => 'blog-post'
+
+], function ($router) {
+  Route::get('', 'BlogPostController@show');
+  Route::get('index', 'BlogPostController@index');
+});
+
+Route::group([
+
   'middleware' => 'api',
   'prefix' => 'blog-post'
 

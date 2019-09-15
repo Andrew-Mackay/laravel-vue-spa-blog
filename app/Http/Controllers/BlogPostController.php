@@ -17,7 +17,10 @@ class BlogPostController extends Controller
      */
     public function index()
     {
-        //
+      // todo paginate response
+      // todo don't return content of post, only return preview information
+      $posts = BlogPost::all();
+      return response()->json(["posts" => $posts]);
     }
 
     /**
@@ -30,7 +33,7 @@ class BlogPostController extends Controller
     {
       // todo validate length
       $validator = Validator::make(
-        $data,
+        $request->all(),
         [
             "title" => "string | required",
             "summary" => "string | required",

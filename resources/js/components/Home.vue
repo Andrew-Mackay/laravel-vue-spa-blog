@@ -1,50 +1,47 @@
 <template>
     <div>
-      <div v-for="postPreview in postPreviews" v-bind:key="postPreview.id">
-        <post-preview :preview=postPreview></post-preview>
-        <hr/>
+      <div v-if="loaded">
+        <div v-for="postPreview in postPreviews" v-bind:key="postPreview.id">
+          <post-preview :preview=postPreview></post-preview>
+          <hr/>
+        </div>
+      </div>
+      <div v-else>
+        loading...
       </div>
     </div>
 </template>
 
 <script>
+import BlogPost from '@/js/services/BlogPost.service.js';
 import PostPreview from '@/js/components/PostPreview.vue';
-import { constants } from 'crypto';
+
 export default {
   components: {PostPreview},
   data() {
     return {
-      postPreviews: [
-        {
-          id: 0,
-          title: "Test 1",
-          headerImage: "https://assets.pernod-ricard.com/nz/media_images/test.jpg",
-          summary: "test 1 summary"
-        },
-        {
-          id: 1,
-          title: "Test 2",
-          headerImage: "https://assets.pernod-ricard.com/nz/media_images/test.jpg",
-          summary: "test 2 summary"
-        },
-        {
-          id: 2,
-          title: "Test 3",
-          headerImage: "https://assets.pernod-ricard.com/nz/media_images/test.jpg",
-          summary: "test 3 summary"
-        },
-        {
-          id: 3,
-          title: "Test 4",
-          headerImage: "https://assets.pernod-ricard.com/nz/media_images/test.jpg",
-          summary: "test 4 summary"
-        },
-      ]
+      postPreviews: [],
+      loaded: false
     }
   },
   mounted() {
-      console.log('Component mounted.')
-      console.log('Logged in?', isLoggedIn)
+      console.log('Component mounted 5.')
+      this.getPostPreviews();
+  },
+  methods: {
+    async getPostPreviews() {
+      console.log("getting posts");
+      try {
+        let response = await BlogPost.getPosts();
+        if(response.status === 200) {
+          console.log(response.data);
+          this.postPreviews = response.data.posts;
+        }
+      }catch(error){
+        console.log("Error:", error)
+      }
+      this.loaded = true;
+    }
   }
 }
 </script>
