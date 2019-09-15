@@ -33,3 +33,11 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
 7) When finished, shutdown the docker containers with the command: 
 
     `docker-compose down`
+
+### Windows 10 Home Workaround
+
+If using Windows 10 Home edition you will need to use Docker-toolbox. The following workarounds must be added to accommodate this:
+
+- Change `npm install` to `npm install --no-bin-links`
+- Run `npm install -g cross-env`
+- Add `innodb_use_native_aio=0` to `laradock/mysql/my.conf` under the section `mysqld`
