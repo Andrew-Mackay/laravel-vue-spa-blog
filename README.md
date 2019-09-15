@@ -18,7 +18,7 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
 
      `docker-compose up -d nginx mysql`
 
-4) Open a terminal in the laradock workspace using the command: 
+4) Open a terminal in the laradock workspace using the command:  
 
     `docker-compose exec --user=laradock workspace bash`
 
@@ -26,11 +26,12 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
     - `composer install`
     - `php artisan migrate:refresh`
     - `npm install`
-    - `npm run watch`
+    - `npm run watch` 
+        - If this does not automatically rebuild when you make changes, run `npm run watch-poll` instead
 
 6) Open a browser and navigate to `localhost`
 
-7) When finished, shutdown the docker containers with the command: 
+7) When finished, shutdown the docker containers with the command:  
 
     `docker-compose down`
 
@@ -41,3 +42,4 @@ If using Windows 10 Home edition you will need to use Docker-toolbox. The follow
 - Change `npm install` to `npm install --no-bin-links`
 - Run `npm install -g cross-env`
 - Add `innodb_use_native_aio=0` to `laradock/mysql/my.conf` under the section `mysqld`
+- Navigate to the IP address of the default machine that docker uses in your browser instead of `localhost`  
