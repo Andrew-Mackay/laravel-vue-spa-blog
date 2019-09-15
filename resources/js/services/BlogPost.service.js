@@ -12,15 +12,13 @@ export default class BlogPost {
     return axios.get(blogPostURL + '/' + id);
   }
 
-  static createPost(post) {
+  static createPost(formData) {
+    let headers = this.getAuthHeader();
+    headers['content-type'] = 'multipart/form-data';
     return axios.post(
       blogPostURL,
-      {
-        title: post.title,
-        summary: post.summary,
-        content: post.content
-      },
-      {headers:this.getAuthHeader()}
+      formData,
+      {headers:headers}
       );
   }
 

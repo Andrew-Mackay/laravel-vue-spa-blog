@@ -47,9 +47,9 @@ export default {
       content: "",
       showPreview: false,
       images: [],
-      IMAGE_TYPES_ACCEPTED:
-        "image/gif,image/jpeg,image/png,image/bmp,image/jpg",
+      IMAGE_TYPES_ACCEPTED: "image/gif,image/jpeg,image/png,image/bmp,image/jpg",
       MAX_NUMBER_OF_IMAGES: 30,
+      formData: new FormData()
     };
   },
   computed: {
@@ -67,13 +67,11 @@ export default {
   },
   methods: {
     async createPost() {
-      let post = {
-        title: this.title,
-        summary: this.summary,
-        content: this.compiledContent
-      };
+      this.formData.append('title', this.title);
+      this.formData.append('summary', this.summary);
+      this.formData.append('content', this.compiledContent);
       try {
-        let response = await BlogPost.createPost(post);
+        let response = await BlogPost.createPost(this.formData);
         if (response.status === 200) {
           this.$router.push({ name: "post", params: { id: response.data.id } });
         }
@@ -86,6 +84,8 @@ export default {
       if(this.headerImage.length == 0) {
         this.headerImage = fileList[0].path;
       }
+      let file = formData.get('file');
+      this.formData.append('images[]', file);
     },
     beforeRemove(index, done, fileList) {},
     editImage(formData, index, fileList) {},

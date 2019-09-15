@@ -39,6 +39,7 @@ Route::group([
   Route::get('{postId}', 'BlogPostController@show');
 });
 
+// todo check middleware actually works
 Route::group([
 
   'middleware' => 'api',
