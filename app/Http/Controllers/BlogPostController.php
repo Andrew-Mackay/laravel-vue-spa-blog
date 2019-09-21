@@ -11,6 +11,7 @@ use JD\Cloudder\Facades\Cloudder;
 
 class BlogPostController extends Controller
 {
+  const CLOUDINARY_UPLOAD_FOLDER = "k_blog/";
 
     /**
      * Display a listing of the resource.
@@ -20,8 +21,7 @@ class BlogPostController extends Controller
     public function index()
     {
       // todo paginate response
-      // todo don't return content of post, only return preview information
-      $posts = BlogPost::orderBy('created_at', 'desc')->get();
+      $posts = BlogPost::select("id", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
       return response()->json(["posts" => $posts]);
     }
 
@@ -53,10 +53,15 @@ class BlogPostController extends Controller
       $headerImageUrl = "";
       if($request->images) {
         $urlMap = [];
+        // todo check slug is unique?
+        $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . str_slug($request->title, "-");
+        $uploadOptions = [
+          "folder" => $uploadFolder
+        ];
         foreach ($request->images as $image) {
           try {
             $clientImageName = $image->getClientOriginalName();
-            Cloudder::upload($image->getRealPath());   
+            Cloudder::upload($image->getRealPath(), null, $uploadOptions);   
             $cloudinaryURL = Cloudder::show(Cloudder::getPublicId());  
             $urlMap[$clientImageName] = $cloudinaryURL;    
           } catch (\Exception $exception) {
@@ -89,8 +94,7 @@ class BlogPostController extends Controller
     public function show(BlogPost $blogPost, int $postId)
     {
       // todo test fail condition
-      // todo limit what is returned
-      $post = BlogPost::findOrFail($postId);
+      $post = BlogPost::select("title", "summary", "content", "header_image_url", "created_at")->findOrFail($postId);
       return response()->json($post);
     }
 
