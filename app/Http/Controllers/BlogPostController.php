@@ -21,7 +21,7 @@ class BlogPostController extends Controller
     {
       // todo paginate response
       // todo don't return content of post, only return preview information
-      $posts = BlogPost::all();
+      $posts = BlogPost::orderBy('created_at', 'desc')->get();
       return response()->json(["posts" => $posts]);
     }
 

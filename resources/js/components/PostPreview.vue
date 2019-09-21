@@ -1,7 +1,7 @@
 <template>
 <router-link :to=postLink>
   <div id="preview-container">
-    <img :src="preview.headerImage"/>
+    <img :src="preview.header_image_url"/>
     <div id="preview-title">{{ preview.title }}</div>
     <div id="preview-summary">{{ preview.summary }}</div>
   </div>
