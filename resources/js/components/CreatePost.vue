@@ -76,7 +76,7 @@ export default {
       try {
         let response = await BlogPost.createPost(this.formData);
         if (response.status === 200) {
-          this.$router.push({ name: "post", params: { id: response.data.id } });
+          this.$router.push({ name: "post", params: { slug: response.data.slug } });
         }
       } catch (error) {
         console.log("Error:", error);

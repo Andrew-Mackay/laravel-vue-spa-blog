@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     postLink() {
-      return {path: "/post/" + this.preview.id}
+      return {path: "/post/" + this.preview.slug}
     }
   }
 }

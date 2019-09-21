@@ -36,7 +36,7 @@ Route::group([
 
 ], function ($router) {
   Route::get('index', 'BlogPostController@index');
-  Route::get('{postId}', 'BlogPostController@show');
+  Route::get('{blogPost}', 'BlogPostController@show');
 });
 
 // todo check middleware actually works

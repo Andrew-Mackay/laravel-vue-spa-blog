@@ -35,7 +35,7 @@ export default {
   },
   mounted() {
     if(!this.previewMode) {
-      this.getPost(this.$route.params.id)
+      this.getPost(this.$route.params.slug)
     } else {
       this.post = this.previewPost
     }

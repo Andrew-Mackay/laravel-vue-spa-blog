@@ -8,8 +8,8 @@ export default class BlogPost {
     return axios.get(blogPostURL + '/index');
   }
 
-  static getPost(id) {
-    return axios.get(blogPostURL + '/' + id);
+  static getPost(slug) {
+    return axios.get(blogPostURL + '/' + slug);
   }
 
   static createPost(formData) {

@@ -21,7 +21,7 @@ class BlogPostController extends Controller
     public function index()
     {
       // todo paginate response
-      $posts = BlogPost::select("id", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
+      $posts = BlogPost::select("slug", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
       return response()->json(["posts" => $posts]);
     }
 
@@ -40,9 +40,9 @@ class BlogPostController extends Controller
             "title" => "string | required",
             "summary" => "string | required",
             "content" => "string | required",
-            "headerImageName" => "string | required",
             "images" => "array | max:30",
-            "images.*" => "image | mimes:gif,jpeg,png,bmp,jpg|max:20000"
+            "images.*" => "image | mimes:gif,jpeg,png,bmp,jpg|max:20000",
+            "headerImageName" => "nullable | string",
         ]
       );
       if ($validator->fails()) {
@@ -71,7 +71,9 @@ class BlogPostController extends Controller
         }
         // Convert image names to cloudinary urls
         $content = strtr($request->content, $urlMap);
-        $headerImageUrl = $urlMap[$request->headerImageName];
+        if($request->headerImageName) {
+          $headerImageUrl = $urlMap[$request->headerImageName];
+        }
       }
 
       $user = auth()->user();
@@ -82,7 +84,7 @@ class BlogPostController extends Controller
         "header_image_url" => $headerImageUrl
       ]);
 
-      return response()->json(["id" => $blogPost->id]);
+      return response()->json(["slug" => $blogPost->slug]);
     }
 
     /**
@@ -91,11 +93,17 @@ class BlogPostController extends Controller
      * @param  \App\BlogPost  $blogPost
      * @return \Illuminate\Http\Response
      */
-    public function show(BlogPost $blogPost, int $postId)
+    public function show(BlogPost $blogPost)
     {
       // todo test fail condition
-      $post = BlogPost::select("title", "summary", "content", "header_image_url", "created_at")->findOrFail($postId);
-      return response()->json($post);
+      $formattedResponse = [
+        "title" => $blogPost->title,
+        "summary" => $blogPost->summary,
+        "content" => $blogPost->content,
+        "header_image_url" => $blogPost->header_image_url,
+        "created_at" => $blogPost->created_at
+      ];
+      return response()->json($formattedResponse);
     }
 
     /**

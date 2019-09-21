@@ -1,7 +1,7 @@
 <template>
     <div>
       <div v-if="loaded">
-        <div v-for="postPreview in postPreviews" v-bind:key="postPreview.id">
+        <div v-for="postPreview in postPreviews" v-bind:key="postPreview.slug">
           <post-preview :preview=postPreview></post-preview>
           <hr/>
         </div>
