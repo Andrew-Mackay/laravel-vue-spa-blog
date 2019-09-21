@@ -47,7 +47,6 @@ class BlogPostController extends Controller
       if ($validator->fails()) {
         return response()->json($validator->errors(), JsonResponse::HTTP_BAD_REQUEST);
       }
-
       $urlMap = [];
       foreach ($request->images as $image) {
         try {
@@ -60,16 +59,17 @@ class BlogPostController extends Controller
           \Log::error($exception);
         }
       }
-      $content = strtr($request-)
-  
+      // Convert image names to cloudinary urls
+      $content = strtr($request->content, $urlMap);
+
       $user = auth()->user();
       $blogPost = $user->blogPosts()->create([
         "title" => $request->title,
         "summary" => $request->summary,
-        "content" => $request->content
+        "content" => $content
       ]);
 
-      return response()->json(["id" => $blogPost->id, "urls" => $urls]);
+      return response()->json(["id" => $blogPost->id]);
     }
 
     /**
