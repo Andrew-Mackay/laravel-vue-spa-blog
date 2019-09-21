@@ -18,7 +18,7 @@ class CreateBlogPostsTable extends Migration
             $table->integer('user_id');
             $table->string('title');
             $table->string('summary');
-            $table->TEXT('content');
+            $table->text('content');
             $table->timestamps();
         });
     }

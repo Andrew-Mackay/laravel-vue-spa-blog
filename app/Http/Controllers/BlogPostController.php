@@ -40,6 +40,7 @@ class BlogPostController extends Controller
             "title" => "string | required",
             "summary" => "string | required",
             "content" => "string | required",
+            "headerImageName" => "string | required",
             "images" => "array | max:30",
             "images.*" => "image | mimes:gif,jpeg,png,bmp,jpg|max:20000"
         ]
@@ -49,6 +50,7 @@ class BlogPostController extends Controller
       }
 
       $content = $request->content;
+      $headerImageUrl = "";
       if($request->images) {
         $urlMap = [];
         foreach ($request->images as $image) {
@@ -64,13 +66,15 @@ class BlogPostController extends Controller
         }
         // Convert image names to cloudinary urls
         $content = strtr($request->content, $urlMap);
+        $headerImageUrl = $urlMap[$request->headerImageName];
       }
 
       $user = auth()->user();
       $blogPost = $user->blogPosts()->create([
         "title" => $request->title,
         "summary" => $request->summary,
-        "content" => $content
+        "content" => $content,
+        "header_image_url" => $headerImageUrl
       ]);
 
       return response()->json(["id" => $blogPost->id]);

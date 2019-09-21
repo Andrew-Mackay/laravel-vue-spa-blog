@@ -1,7 +1,7 @@
 <template>
 <div>
   <div v-if="loaded || previewMode" id="post-container">
-    <img id="header-image" :src="post.headerImage"/>
+    <img id="header-image" :src="post.header_image_url"/>
     <div id="post-title">{{ post.title }}</div>
     <div id="post-summary">{{ post.summary }}</div>
     <div id="post-content" v-html="post.content"></div>

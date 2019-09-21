@@ -49,6 +49,7 @@ export default {
     return {
       title: "",
       headerImage: "",
+      headerImageName: "",
       summary: "",
       content: "",
       showPreview: false,
@@ -69,6 +70,7 @@ export default {
   methods: {
     async createPost() {
       this.formData.append('title', this.title);
+      this.formData.append('headerImageName', this.headerImageName);
       this.formData.append('summary', this.summary);
       this.formData.append('content', this.compileMarkdownContentToHTML());
       try {
@@ -85,6 +87,7 @@ export default {
       // set header image if not already set
       if(this.headerImage.length == 0) {
         this.headerImage = image.path;
+        this.headerImageName = image.name;
       }
       Vue.set(this.imageSrcMaps, image.name, image.path);
       let file = formData.get('file');
@@ -93,7 +96,9 @@ export default {
     beforeRemove(index, done, fileList) {},
     editImage(formData, index, fileList) {},
     markIsHeader(index, fileList) {
-      this.headerImage = fileList[0].path;
+      let image = fileList[0];
+      this.headerImage = image.path;
+      this.headerImageName = image.name;
     },
     insertImage(name) {
       let contentTextArea = this.$refs.contentTextArea;
@@ -125,7 +130,7 @@ export default {
         compiledContent = compiledContent.replace(re, (matched) => {return this.imageSrcMaps[matched]})
       }
       this.previewPostObject.title = this.title;
-      this.previewPostObject.headerImage = this.headerImage;
+      this.previewPostObject.header_image_url = this.headerImage;
       this.previewPostObject.summary = this.summary;
       this.previewPostObject.content = compiledContent;
     }
