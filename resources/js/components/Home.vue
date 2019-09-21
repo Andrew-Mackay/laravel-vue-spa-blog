@@ -3,7 +3,6 @@
       <div v-if="loaded">
         <div v-for="postPreview in postPreviews" v-bind:key="postPreview.slug">
           <post-preview :preview=postPreview></post-preview>
-          <hr/>
         </div>
       </div>
       <div v-else>

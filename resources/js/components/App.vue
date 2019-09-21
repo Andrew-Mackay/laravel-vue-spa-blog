@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div>
-      isLoggedIn? {{ isLoggedIn }} <br/>
-      hasExpired? {{ tokenExpired }}
+    <div class="navbar">
+      <div>
+        <router-link tag="li" to="/">K_Blog</router-link>
+      </div>
+      <div>
+        <router-link tag="li" to="/about">About</router-link>
+      </div>
+      <div>
+        <router-link v-if="isLoggedIn && !tokenExpired" tag="li" to="/post/new">New Post</router-link>
+      </div>
     </div>
-    <router-link tag="li" to="/">Home</router-link>
-    <router-link tag="li" to="/about">About</router-link>
-    <router-link v-if="isLoggedIn" tag="li" to="/post/new">New Post</router-link>
-    <router-view></router-view>
+      <router-view></router-view>
   </div>
-
 </template>
 <script>
 import moment from 'moment';
@@ -28,3 +31,16 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .navbar {
+    display: flex;
+    list-style-type: none;
+  }
+  .navbar div {
+    margin-right: 20px;
+    text-decoration: underline;
+  }
+  .navbar div :hover {
+    color: rgb(201, 38, 9);
+  }
+</style>
