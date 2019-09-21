@@ -1,34 +1,40 @@
 <template>
-  <div id="editor">
-    <input v-model="title" placeholder="title" />
-    <br />
-    <textarea v-model="summary" placeholder="summary"></textarea>
-    <br />
-    <textarea v-model="content" placeholder="blog post"></textarea>
-    <br />
-    <vue-upload-multiple-image
-      @upload-success="uploadImageSuccess"
-      @before-remove="beforeRemove"
-      @edit-image="editImage"
-      @mark-is-primary="markIsHeader"
-      :data-images="images"
-      :dragText="'Drag and drop images here to upload'"
-      :browseText="'or click browse'"
-      :primaryText="'header image'"
-      :markIsPrimaryText="'use as header image'"
-      :popupText="'This image is set as your header image and will be displayed at the top of your blog post'"
-      :dropText="'Drop image here to upload ...'"
-      :accept="IMAGE_TYPES_ACCEPTED"
-      :maxImage="MAX_NUMBER_OF_IMAGES"
-    ></vue-upload-multiple-image>
+  <div>
+    <button v-if="!editMode" @click="editMode = true">Edit</button>
+    <button v-else @click="compile(); editMode = false;">Preview</button>
 
+    <div v-if="editMode" id="editor">
+      <input v-model="title" placeholder="title" />
+      <br />
+      <textarea v-model="summary" placeholder="summary"></textarea>
+      <br />
+      <textarea ref="contentTextArea" v-model="content" placeholder="blog post"></textarea>
+      <br />
+      <div v-for="(path, name) in imageSrcMaps" v-bind:key="name">
+        <img :src="path" style="width: 100px"/>
+        <button @click="insertImage(name)">Add Image {{ name }}</button>
+      </div>
+      <br />
+      <vue-upload-multiple-image
+        @upload-success="uploadImageSuccess"
+        @before-remove="beforeRemove"
+        @edit-image="editImage"
+        @mark-is-primary="markIsHeader"
+        :data-images="images"
+        :dragText="'Drag and drop images here to upload'"
+        :browseText="'or click browse'"
+        :primaryText="'header image'"
+        :markIsPrimaryText="'use as header image'"
+        :popupText="'This image is set as your header image and will be displayed at the top of your blog post'"
+        :dropText="'Drop image here to upload ...'"
+        :accept="IMAGE_TYPES_ACCEPTED"
+        :maxImage="MAX_NUMBER_OF_IMAGES"
+      ></vue-upload-multiple-image>
+    </div>
+    <div v-else>
+        <post :previewMode="true" :previewPost="previewPostObject"></post>
+    </div>
     <button @click="createPost">Save</button>
-    <button
-      @click="showPreview = !showPreview"
-      v-text="showPreview ? 'Hide Preview': 'Show Preview'"
-    >Preview</button>
-    <hr v-if="showPreview" />
-    <post v-if="showPreview" :previewMode="true" :previewPost="previewPostObject"></post>
   </div>
 </template>
 <script>
@@ -49,27 +55,22 @@ export default {
       images: [],
       IMAGE_TYPES_ACCEPTED: "image/gif,image/jpeg,image/png,image/bmp,image/jpg",
       MAX_NUMBER_OF_IMAGES: 30,
-      formData: new FormData()
+      formData: new FormData(),
+      imageSrcMaps: {},
+      editMode: true,
+      previewPostObject: {
+        title: "",
+        headerImage: "",
+        summary: "",
+        content: ""
+      }
     };
-  },
-  computed: {
-    previewPostObject() {
-      return {
-        title: this.title,
-        headerImage: this.headerImage,
-        summary: this.summary,
-        content: this.compiledContent
-      };
-    },
-    compiledContent() {
-      return marked(this.content);
-    }
   },
   methods: {
     async createPost() {
       this.formData.append('title', this.title);
       this.formData.append('summary', this.summary);
-      this.formData.append('content', this.compiledContent);
+      this.formData.append('content', this.compileMarkdownContentToHTML());
       try {
         let response = await BlogPost.createPost(this.formData);
         if (response.status === 200) {
@@ -80,10 +81,12 @@ export default {
       }
     },
     uploadImageSuccess(formData, index, fileList) {
+      let image = fileList[index]
       // set header image if not already set
       if(this.headerImage.length == 0) {
-        this.headerImage = fileList[0].path;
+        this.headerImage = image.path;
       }
+      Vue.set(this.imageSrcMaps, image.name, image.path);
       let file = formData.get('file');
       this.formData.append('images[]', file);
     },
@@ -91,6 +94,40 @@ export default {
     editImage(formData, index, fileList) {},
     markIsHeader(index, fileList) {
       this.headerImage = fileList[0].path;
+    },
+    insertImage(name) {
+      let contentTextArea = this.$refs.contentTextArea;
+      // get cursor's position:
+      let startPos = contentTextArea.selectionStart;
+      let endPos = contentTextArea.selectionEnd;
+      let cursorPos = startPos;
+      let tmpStr = contentTextArea.value;
+
+      // insert:
+      let id = "foobar"
+      let insertText = `<img id="${id}" src="${name}"/>`
+      this.content = tmpStr.substring(0, startPos) + insertText + tmpStr.substring(endPos, tmpStr.length);
+
+      // move cursor:
+      setTimeout(() => {
+        cursorPos += name.length;
+        contentTextArea.selectionStart = contentTextArea.selectionEnd = cursorPos;
+      }, 10);
+    },
+    compileMarkdownContentToHTML() {
+      return marked(this.content);
+    },
+    compile() {
+      let compiledContent = this.compileMarkdownContentToHTML();
+      let imageNames = Object.keys(this.imageSrcMaps);
+      if(imageNames.length != 0) {
+        let re = new RegExp(imageNames.join("|"), "g");
+        compiledContent = compiledContent.replace(re, (matched) => {return this.imageSrcMaps[matched]})
+      }
+      this.previewPostObject.title = this.title;
+      this.previewPostObject.headerImage = this.headerImage;
+      this.previewPostObject.summary = this.summary;
+      this.previewPostObject.content = compiledContent;
     }
   }
 };

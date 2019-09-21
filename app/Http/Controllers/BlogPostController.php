@@ -48,17 +48,19 @@ class BlogPostController extends Controller
         return response()->json($validator->errors(), JsonResponse::HTTP_BAD_REQUEST);
       }
 
-      $urls = [];
+      $urlMap = [];
       foreach ($request->images as $image) {
         try {
+          $clientImageName = $image->getClientOriginalName();
           Cloudder::upload($image->getRealPath());   
           $cloudinaryURL = Cloudder::show(Cloudder::getPublicId());  
-          $urls[] = $cloudinaryURL;    
+          $urlMap[$clientImageName] = $cloudinaryURL;    
         } catch (\Exception $exception) {
           \Log::error("Image upload failed");
           \Log::error($exception);
         }
       }
+      $content = strtr($request-)
   
       $user = auth()->user();
       $blogPost = $user->blogPosts()->create([
