@@ -68,9 +68,11 @@ export default {
     flex-direction: column;
     align-items: center;
   }
-  header-image {
+  #header-image {
     max-width: 100%;
+    max-height: 100px;
     height: auto;
+    width: auto;
   }
   #post-title {
     font-weight: bold;
@@ -79,7 +81,7 @@ export default {
   #post-summary {
     font-style: italic;
   }
-  #post-content {
-    
+  #post-content >>> img{
+    width: 200px;
   }
 </style>
