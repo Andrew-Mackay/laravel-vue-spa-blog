@@ -54,7 +54,7 @@ class BlogPostController extends Controller
       if($request->images) {
         $urlMap = [];
         // todo check slug is unique?
-        $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . str_slug($request->title, "-");
+        $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . env("APP_ENV", "local") . "/" . str_slug($request->title, "-");
         $uploadOptions = [
           "folder" => $uploadFolder
         ];
