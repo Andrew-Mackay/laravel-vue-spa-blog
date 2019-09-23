@@ -3,7 +3,7 @@
     <button v-if="!editMode" @click="editMode = true">Edit</button>
     <button v-else @click="compile(); editMode = false;">Preview</button>
 
-    <div v-if="editMode" id="editor">
+    <div v-show="editMode" id="editor">
       <input v-model="title" placeholder="title" />
       <br />
       <textarea v-model="summary" placeholder="summary"></textarea>
@@ -31,7 +31,7 @@
         :maxImage="MAX_NUMBER_OF_IMAGES"
       ></vue-upload-multiple-image>
     </div>
-    <div v-else>
+    <div v-if="!editMode">
         <post :previewMode="true" :previewPost="previewPostObject"></post>
     </div>
     <button @click="createPost">Save</button>
