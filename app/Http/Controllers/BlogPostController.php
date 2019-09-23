@@ -67,8 +67,9 @@ class BlogPostController extends Controller
         foreach ($request->images as $image) {
           try {
             $clientImageName = $image->getClientOriginalName();
-            Cloudder::upload($image->getRealPath(), null, $uploadOptions);   
-            $cloudinaryURL = Cloudder::show(Cloudder::getPublicId());  
+            Cloudder::upload($image->getRealPath(), null, $uploadOptions);  
+            $uploadedResult = Cloudder::getResult();
+            $cloudinaryURL = $uploadedResult["secure_url"];  
             $urlMap[$clientImageName] = $cloudinaryURL;    
           } catch (\Exception $exception) {
             \Log::error("Image upload failed");
