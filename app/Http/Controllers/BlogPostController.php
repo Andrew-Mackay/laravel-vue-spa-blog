@@ -48,13 +48,19 @@ class BlogPostController extends Controller
       if ($validator->fails()) {
         return response()->json($validator->errors(), JsonResponse::HTTP_BAD_REQUEST);
       }
+      $user = auth()->user();
+      $blogPost = $user->blogPosts()->create([
+        "title" => $request->title,
+        "summary" => $request->summary,
+        "content" => "",
+        "header_image_url" => ""
+      ]);
 
       $content = $request->content;
       $headerImageUrl = "";
       if($request->images) {
         $urlMap = [];
-        // todo check slug is unique?
-        $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . env("APP_ENV", "local") . "/" . str_slug($request->title, "-");
+        $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . env("APP_ENV", "local") . "/" . $blogPost->slug;
         $uploadOptions = [
           "folder" => $uploadFolder
         ];
@@ -75,14 +81,9 @@ class BlogPostController extends Controller
           $headerImageUrl = $urlMap[$request->headerImageName];
         }
       }
-
-      $user = auth()->user();
-      $blogPost = $user->blogPosts()->create([
-        "title" => $request->title,
-        "summary" => $request->summary,
-        "content" => $content,
-        "header_image_url" => $headerImageUrl
-      ]);
+      $blogPost->content = $content;
+      $blogPost->header_image_url = $headerImageUrl;
+      $blogPost->save();
 
       return response()->json(["slug" => $blogPost->slug]);
     }
