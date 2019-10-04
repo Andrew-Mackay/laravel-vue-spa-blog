@@ -79,7 +79,7 @@ export default {
   }
   #post-title {
     font-weight: bold;
-    font-size: 6rem;
+    font-size: 4.5rem;
   }
   #post-summary {
     font-style: italic;

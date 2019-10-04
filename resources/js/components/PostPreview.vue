@@ -25,14 +25,19 @@ export default {
 }
 </script>
 <style scoped>
+  a {
+    text-decoration: none;
+  }
   .preview-container {
     display: flex;
     align-content: center;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    background-color: Snow;
   }
   .preview-box {
+    color: black;
     width: 40vw;
     box-shadow: 0 1px 4px rgba(0,0,0,.04);
     border: 1px solid rgba(0,0,0,.09);
@@ -45,13 +50,16 @@ export default {
   img {
     max-width: 100%;
     height: auto;
+    margin-bottom: 5px;
   }
   #preview-title {
     font-weight: bold;
-    font-size: 30px;
+    font-size: 2rem;
+    margin-bottom: 5px;
   }
   #preview-summary {
     font-style: italic;
+    font-size: 1.2rem;
   }
 
 </style>

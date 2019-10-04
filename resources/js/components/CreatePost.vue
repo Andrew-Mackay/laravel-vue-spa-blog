@@ -11,9 +11,13 @@
         <br />
         <textarea ref="contentTextArea" v-model="content" placeholder="blog post" id="blog-post"></textarea>
         <br />
-        <div v-for="(path, name) in imageSrcMaps" v-bind:key="name" id="insert-images">
-          <img :src="path"/>
-          <button @click="insertImage(name)">Add Image {{ name }}</button>
+        <div v-if="Object.keys(imageSrcMaps).length > 0">
+          Click on an image to insert it into the blog post:
+        </div>
+        <div id=insert-images-container>
+          <div v-for="(path, name) in imageSrcMaps" v-bind:key="name">
+            <button @click="insertImage(name)"><img :src="path"/></button>
+          </div>
         </div>
         <br />
         <div id="image-uploader">
@@ -158,6 +162,7 @@ export default {
   flex-direction: column;
   align-items: center;
   align-content: space-between;
+  padding: 0 10px
 }
 #editor {
   max-width: 800px;
@@ -177,11 +182,20 @@ export default {
   min-height: 300px;
   margin-bottom: 20px;
 }
-#insert-images {
+#insert-images-container {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-start;
+  flex-wrap: wrap;
   margin-bottom: 20px;
 }
-#insert-images img {
-  width: 50px;
+#insert-images-container img {
+  width: 100%;
+}
+#insert-images-container button {
+  width: 64px;
+  height: 64px;
+  margin-right: 5px;
 }
 #image-uploader {
   margin-bottom: 20px;
@@ -194,34 +208,18 @@ export default {
 #publish-button {
   padding: 10px 40px
 }
-/* html, body, #editor {
-  margin: 0;
-  height: 100%;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #333;
-} */
+>>>.image-container {
+  width: 100%;
+  min-height: 200px;
+}
+>>>.image-list-container {
+  max-width: 100%;
+}
+>>>.image-list-item {
+  width: 64px !important;
+  height: 64px !important;
+}
+>>>.show-image {
 
-/* textarea, #editor div {
-  display: inline-block;
-  width: 49%;
-  height: 100%;
-  vertical-align: top;
-  box-sizing: border-box;
-  padding: 0 20px;
-} */
-
-/* textarea {
-  border: none;
-  border-right: 1px solid #ccc;
-  resize: none;
-  outline: none;
-  background-color: #f6f6f6;
-  font-size: 14px;
-  font-family: 'Monaco', courier, monospace;
-  padding: 20px;
-} */
-
-/* code {
-  color: #f66;
-} */
+}
 </style>
