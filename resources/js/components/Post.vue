@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="container">
   <div v-if="loaded || previewMode" id="post-container">
     <img id="header-image" :src="post.header_image_url"/>
     <div id="post-title">{{ post.title }}</div>
@@ -40,7 +40,7 @@ export default {
       this.post = this.previewPost
     }
   },
-  watch: { 
+  watch: {
     previewPost (newPost) {
       this.post = newPost
     }
@@ -61,7 +61,13 @@ export default {
 }
 </script>
 <style scoped>
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   #post-container {
+    max-width: 800px;
     padding: 40px 0px ;
     display: flex;
     align-content: center;
@@ -69,19 +75,17 @@ export default {
     align-items: center;
   }
   #header-image {
-    max-width: 100%;
-    max-height: 100px;
-    height: auto;
-    width: auto;
+    width: 100%;
   }
   #post-title {
     font-weight: bold;
-    font-size: 30px;
+    font-size: 6rem;
   }
   #post-summary {
     font-style: italic;
+    font-size: 1.5rem;
   }
   #post-content >>> img{
-    width: 200px;
+    width: 50%;
   }
 </style>
