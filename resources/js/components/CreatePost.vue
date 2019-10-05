@@ -1,26 +1,28 @@
 <template>
   <div>
+    <div id="preview-edit-button-container" class="space-bottom">
     <button v-if="!editMode" @click="editMode = true">Edit</button>
     <button v-else @click="compile(); editMode = false;">Preview</button>
-
+    </div>
     <div v-show="editMode" id="editor-container">
       <div id="editor">
-        <input v-model="title" placeholder="title" id="title" />
-        <br />
-        <textarea v-model="summary" placeholder="summary" id="summary"></textarea>
-        <br />
-        <textarea ref="contentTextArea" v-model="content" placeholder="blog post" id="blog-post"></textarea>
-        <br />
+        <div>
+          <input v-model="title" placeholder="title" id="title" class="space-bottom"/>
+        </div>
+        <div>
+          <textarea v-model="summary" placeholder="summary" id="summary" class="space-bottom"></textarea>
+        </div>
+        <textarea ref="contentTextArea" v-model="content" placeholder="blog post" id="blog-post" class="space-bottom"></textarea>
         <div v-if="Object.keys(imageSrcMaps).length > 0">
           Click on an image to insert it into the blog post:
         </div>
-        <div id=insert-images-container>
+        <div id=insert-images-container class="space-bottom">
           <div v-for="(path, name) in imageSrcMaps" v-bind:key="name">
             <button @click="insertImage(name)"><img :src="path"/></button>
           </div>
         </div>
         <br />
-        <div id="image-uploader">
+        <div class="space-bottom">
           <vue-upload-multiple-image
             @upload-success="uploadImageSuccess"
             @before-remove="beforeRemove"
@@ -42,7 +44,11 @@
         <post :previewMode="true" :previewPost="previewPostObject"></post>
       </div>
       <div id="publish-button-container">
-        <button @click="createPost" id="publish-button">Publish Post</button>
+        <button
+        @click="createPost"
+        id="publish-button"
+        :disabled="isSavingPost"
+        v-text="isSavingPost ? 'Publishing Post' : 'Publish Post'"/>
       </div>
     </div>
   </div>
@@ -75,11 +81,13 @@ export default {
         headerImage: "",
         summary: "",
         content: ""
-      }
+      },
+      isSavingPost: false
     };
   },
   methods: {
     async createPost() {
+      this.isSavingPost = true;
       this.formData.append("title", this.title);
       this.formData.append("headerImageName", this.headerImageName);
       this.formData.append("summary", this.summary);
@@ -95,6 +103,7 @@ export default {
       } catch (error) {
         console.log("Error:", error);
       }
+      this.isSavingPost = false;
     },
     uploadImageSuccess(formData, index, fileList) {
       let image = fileList[index];
@@ -157,6 +166,17 @@ export default {
 };
 </script>
 <style scoped>
+.space-bottom {
+  margin-bottom: 20px;
+}
+#preview-edit-button-container {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+}
+#preview-edit-button-container button {
+  padding: 10px 40px;
+}
 #editor-container {
   display: flex;
   flex-direction: column;
@@ -166,28 +186,31 @@ export default {
 }
 #editor {
   max-width: 800px;
+  width: 100%;
 }
 #title {
   width: 100%;
   height: 28px;
-  margin-bottom: 20px;
+  border: 1px solid gray;
+  border-radius: 3px; 
 }
 #summary {
   width: 100%;
   min-height: 50px;
-  margin-bottom: 20px;
+  border: 1px solid gray;
+  border-radius: 3px; 
 }
 #blog-post {
   width: 100%;
   min-height: 300px;
-  margin-bottom: 20px;
+  border: 1px solid gray;
+  border-radius: 3px; 
 }
 #insert-images-container {
   display: flex;
   flex-direction: row;
   align-content: flex-start;
   flex-wrap: wrap;
-  margin-bottom: 20px;
 }
 #insert-images-container img {
   width: 100%;
@@ -196,9 +219,6 @@ export default {
   width: 64px;
   height: 64px;
   margin-right: 5px;
-}
-#image-uploader {
-  margin-bottom: 20px;
 }
 #publish-button-container {
   display: flex;
@@ -211,6 +231,7 @@ export default {
 >>>.image-container {
   width: 100%;
   min-height: 200px;
+  border: 1px solid gray;
 }
 >>>.image-list-container {
   max-width: 100%;
