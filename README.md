@@ -1,4 +1,4 @@
-# "K Blog"
+# "OCD Thoughts" Blog
 
 *Blogging website for Kirsty.*
 
