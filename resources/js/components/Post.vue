@@ -76,6 +76,7 @@ export default {
   }
   #header-image {
     width: 100%;
+    border-radius: 20px;
   }
   #post-title {
     font-weight: bold;
@@ -90,10 +91,13 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 16px 0;
+    line-height: 1.6;
+    font-size: 1.2rem;
   }
   #post-content >>> img{
     width: 70%;
     align-self: center;
     margin: 16px 0;
+    border-radius: 20px;
   }
 </style>
