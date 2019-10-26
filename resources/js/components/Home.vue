@@ -1,9 +1,12 @@
 <template>
     <div>
-      <div v-if="loaded">
-        <div v-for="postPreview in postPreviews" v-bind:key="postPreview.slug">
-          <post-preview :preview=postPreview></post-preview>
-        </div>
+      <div v-if="loaded" class="post-previews-container">
+          <post-preview 
+            v-for="postPreview in postPreviews"
+            v-bind:key="postPreview.slug" 
+            :preview=postPreview
+            class="post-preview-spacer">
+          </post-preview>
       </div>
       <div v-else>
         loading...
@@ -41,3 +44,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+.post-previews-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-preview-spacer {
+  margin-bottom: 30px;
+}
+</style>

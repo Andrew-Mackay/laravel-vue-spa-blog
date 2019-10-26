@@ -9,16 +9,14 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <style>
-          #app-container {
-            background-color: Snow;
+        <style type="text/css">
+          body {
+            margin: 0;
           }
         </style>
     </head>
     <body>
-      <div id="app-container">
-        <div id="app"></div>
-      </div>
+      <div id="app"></div>
       
       <script src="{{ asset('js/app.js') }}"></script>
     </body>

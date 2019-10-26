@@ -67,7 +67,8 @@ export default {
     align-items: center;
   }
   #post-container {
-    max-width: 800px;
+    max-width: 700px;
+    width: 80%;
     padding: 40px 0px ;
     display: flex;
     align-content: center;

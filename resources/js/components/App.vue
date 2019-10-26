@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <div class="navbar">
       <div>
         <router-link tag="li" to="/">K_Blog</router-link>
@@ -32,9 +32,13 @@ export default {
 }
 </script>
 <style scoped>
+  .app {
+    background-color: #fff;
+  }
   .navbar {
     display: flex;
     list-style-type: none;
+    margin-bottom: 20px;
   }
   .navbar div {
     margin-right: 20px;
