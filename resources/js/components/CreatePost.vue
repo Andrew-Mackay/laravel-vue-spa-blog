@@ -46,12 +46,12 @@
       <div id="publish-button-container">
         <button
         @click="createPost(true)"
-        id="publish-button"
+        class="save-button"
         :disabled="isSavingPost"
         v-text="isSavingPost ? 'Saving Draft' : 'Save as Draft'"/>
         <button
         @click="createPost(false)"
-        id="publish-button"
+        class="save-button"
         :disabled="isSavingPost"
         v-text="isSavingPost ? 'Publishing Post' : 'Publish Post'"/>
       </div>
@@ -92,6 +92,12 @@ export default {
   },
   methods: {
     async createPost(saveAsDraft) {
+      if (!saveAsDraft) {
+        let confirmed = confirm(`Are you sure you want to publish this blog post? [${this.title}]`)
+        if (!confirmed) {
+          return
+        }
+      }
       this.isSavingPost = true;
       this.formData.append("title", this.title);
       this.formData.append("headerImageName", this.headerImageName);
@@ -231,8 +237,10 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-#publish-button {
-  padding: 10px 40px
+.save-button {
+  padding: 10px 40px;
+  width: 200px;
+  margin-bottom: 10px;
 }
 >>>.image-container {
   width: 100%;
