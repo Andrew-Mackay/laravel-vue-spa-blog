@@ -45,7 +45,12 @@
       </div>
       <div id="publish-button-container">
         <button
-        @click="createPost"
+        @click="createPost(true)"
+        id="publish-button"
+        :disabled="isSavingPost"
+        v-text="isSavingPost ? 'Saving Draft' : 'Save as Draft'"/>
+        <button
+        @click="createPost(false)"
         id="publish-button"
         :disabled="isSavingPost"
         v-text="isSavingPost ? 'Publishing Post' : 'Publish Post'"/>
@@ -86,12 +91,13 @@ export default {
     };
   },
   methods: {
-    async createPost() {
+    async createPost(saveAsDraft) {
       this.isSavingPost = true;
       this.formData.append("title", this.title);
       this.formData.append("headerImageName", this.headerImageName);
       this.formData.append("summary", this.summary);
       this.formData.append("content", this.compileMarkdownContentToHTML());
+      this.formData.append('saveAsDraft', saveAsDraft ? 1 : 0);
       try {
         let response = await BlogPost.createPost(this.formData);
         if (response.status === 200) {

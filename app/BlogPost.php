@@ -11,7 +11,7 @@ class BlogPost extends Model
     use HasSlug;
 
     protected $fillable = [
-      "title", "summary", "content", "header_image_url"
+      "title", "summary", "content", "header_image_url", "is_draft"
     ];
 
     public function user()

@@ -5,7 +5,7 @@
           <div class="post" v-bind:key="post.slug">
             <div>Title: "{{ post.title }}"</div>
             <div>Created: {{ post.created_at }}</div>
-            <!-- <button>Edit</button> -->
+            <button @click="editPost(post.slug)">Edit</button>
             <button @click="deletePost(post.slug)">Delete</button>
           </div>
         </template>
@@ -61,6 +61,9 @@ export default {
       } else {
         alert("Failed to delete post.");
       }
+    },
+    editPost(slug) {
+      // todo redirect
     }
   }
 }

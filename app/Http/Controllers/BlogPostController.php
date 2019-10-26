@@ -21,7 +21,7 @@ class BlogPostController extends Controller
     public function index()
     {
       // todo paginate response
-      $posts = BlogPost::select("slug", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
+      $posts = BlogPost::where("is_draft", false)->select("slug", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
       return response()->json(["posts" => $posts]);
     }
 
@@ -43,6 +43,7 @@ class BlogPostController extends Controller
             "images" => "array | max:30",
             "images.*" => "image | mimes:gif,jpeg,png,bmp,jpg|max:20000",
             "headerImageName" => "nullable | string",
+            "saveAsDraft" => "boolean | required"
         ]
       );
       if ($validator->fails()) {
@@ -53,7 +54,8 @@ class BlogPostController extends Controller
         "title" => $request->title,
         "summary" => $request->summary,
         "content" => "",
-        "header_image_url" => ""
+        "header_image_url" => "",
+        "is_draft" => $request->saveAsDraft
       ]);
 
       $content = $request->content;
