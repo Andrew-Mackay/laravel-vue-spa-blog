@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>K BLOG</title>
+        <title>{{ $appName }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -14,6 +14,9 @@
             margin: 0;
           }
         </style>
+        <script>
+          let appName = "{{ $appName }}";
+        </script>
     </head>
     <body>
       <div id="app"></div>

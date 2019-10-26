@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 
 class SinglePageController extends Controller
 {
+  const APP_NAME = "OCD Thoughts";
+
   public function index() {
-    return view('app');
+    return view('app', ["appName" => self::APP_NAME]);
   }
 }

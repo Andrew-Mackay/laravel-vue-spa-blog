@@ -2,7 +2,7 @@
   <div class="app">
     <div class="navbar">
       <div>
-        <router-link tag="li" to="/">K_Blog</router-link>
+        <router-link tag="li" to="/">{{ appName }}</router-link>
       </div>
       <div>
         <router-link tag="li" to="/about">About</router-link>
@@ -19,6 +19,7 @@ import moment from 'moment';
 export default {
   data() {
     return {
+      appName: appName,
       isLoggedIn: localStorage.getItem('user-token') != null,
     }
   },
