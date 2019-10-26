@@ -80,12 +80,20 @@ export default {
   #post-title {
     font-weight: bold;
     font-size: 4.5rem;
+    margin: 16px 0;
   }
   #post-summary {
     font-style: italic;
     font-size: 1.5rem;
   }
+  #post-content {
+    display: flex;
+    flex-direction: column;
+    margin: 16px 0;
+  }
   #post-content >>> img{
-    width: 50%;
+    width: 70%;
+    align-self: center;
+    margin: 16px 0;
   }
 </style>
