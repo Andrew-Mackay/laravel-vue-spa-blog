@@ -6,6 +6,7 @@ import About from '@/js/components/About';
 import Post from '@/js/components/Post';
 import CreatePost from '@/js/components/CreatePost';
 import Login from '@/js/components/Login';
+import ManagePosts from '@/js/components/ManagePosts';
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,9 @@ const router = new VueRouter({
     },
     {
       path: '/post/:slug', name: 'post', component: Post
+    },
+    {
+      path: '/posts/manage', name: 'managePosts', component: ManagePosts
     }
   ]
 });

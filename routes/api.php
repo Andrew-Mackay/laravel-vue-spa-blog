@@ -48,5 +48,5 @@ Route::group([
 ], function ($router) {
   Route::post('', 'BlogPostController@store');
   Route::put('', 'BlogPostController@update');
-  Route::delete('', 'BlogPostController@destroy');
+  Route::delete('{blogPost}', 'BlogPostController@destroy');
 });

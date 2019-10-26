@@ -10,6 +10,9 @@
       <div>
         <router-link v-if="isLoggedIn && !tokenExpired" tag="li" to="/post/new">New Post</router-link>
       </div>
+      <div>
+        <router-link v-if="isLoggedIn && !tokenExpired" tag="li" to="/posts/manage">Manage Posts</router-link>
+      </div>
     </div>
       <router-view></router-view>
   </div>

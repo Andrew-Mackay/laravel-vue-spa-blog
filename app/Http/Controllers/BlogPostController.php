@@ -128,6 +128,14 @@ class BlogPostController extends Controller
      */
     public function destroy(BlogPost $blogPost)
     {
-        //
+      $blogPostDeleted = false;
+        try {
+          $blogPost->delete();
+          $blogPostDeleted = true;
+        } catch (\Exception $exception) {
+          \Log::error("Failed to destroy blog post");
+          \Log::error($exception);
+        }
+        return response()->json(["success" => $blogPostDeleted]);
     }
 }
