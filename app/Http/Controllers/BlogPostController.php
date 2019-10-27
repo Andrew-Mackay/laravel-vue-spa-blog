@@ -187,6 +187,7 @@ class BlogPostController extends Controller
       }
       // Convert image names to cloudinary urls
       $content = strtr($request->content, $urlMap);
+      $blogPost->content = $content;
       $headerImageIsCloudinary = strpos($request->headerImageName, "cloudinary") !== false;
       if (!$headerImageIsCloudinary && $request->headerImageName) {
         $blogPost->header_image_url = $urlMap[$request->headerImageName] ?? "";

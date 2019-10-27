@@ -159,8 +159,7 @@ export default {
       let tmpStr = contentTextArea.value;
 
       // insert:
-      let id = "foobar";
-      let insertText = `<img id="${id}" src="${name}"/>`;
+      let insertText = `<img src="${name}"/>`;
       this.content =
         tmpStr.substring(0, startPos) +
         insertText +
