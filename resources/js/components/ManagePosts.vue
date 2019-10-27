@@ -98,7 +98,10 @@ export default {
       }
     },
     editPost(slug) {
-      // todo redirect
+      this.$router.push({
+        name: "editPost",
+        params: { slug: slug }
+      });
     },
     //todo error handling 
     async publishPost(slug) {

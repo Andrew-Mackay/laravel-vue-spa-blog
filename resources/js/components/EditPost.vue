@@ -45,15 +45,10 @@
       </div>
       <div id="publish-button-container">
         <button
-        @click="createPost(true)"
+        @click="savePost"
         class="save-button"
         :disabled="isSavingPost"
-        v-text="isSavingPost ? 'Saving Draft' : 'Save as Draft'"/>
-        <button
-        @click="createPost(false)"
-        class="save-button"
-        :disabled="isSavingPost"
-        v-text="isSavingPost ? 'Publishing Post' : 'Publish Post'"/>
+        v-text="isSavingPost ? 'Saving Changes' : 'Save Changes'"/>
       </div>
     </div>
   </div>
@@ -87,26 +82,44 @@ export default {
         summary: "",
         content: ""
       },
-      isSavingPost: false
+      isSavingPost: false,
+      slug: ""
     };
   },
+  async mounted() {
+    let post = await this.getPost(this.$route.params.slug);
+    console.log(post);
+    this.title = post.title;
+    this.summary = post.summary;
+    this.headerImage = post.header_image_url;
+    this.slug = this.$route.params.slug;
+    this.content = post.markdown;
+    this.imageSrcMaps = post.urlMap;
+  },
   methods: {
-    async createPost(saveAsDraft) {
-      if (!saveAsDraft) {
-        let confirmed = confirm(`Are you sure you want to publish this blog post? [${this.title}]`)
-        if (!confirmed) {
-          return
+    async getPost(slug) {
+      try {
+        let response = await BlogPost.getEditPost(slug);
+        if(response.status === 200) {
+          return response.data;
         }
+      }catch(error){
+        console.log("Error:", error)
+      }
+      return {};
+    },
+    async savePost() {
+      let confirmed = confirm(`Are you sure you want to save these changes to this blog post? [${this.title}]`)
+      if (!confirmed) {
+        return;
       }
       this.isSavingPost = true;
       this.formData.append("title", this.title);
       this.formData.append("headerImageName", this.headerImageName);
       this.formData.append("summary", this.summary);
       this.formData.append("content", this.compileMarkdownContentToHTML());
-      this.formData.append("markdown", this.content);
-      this.formData.append('saveAsDraft', saveAsDraft ? 1 : 0);
       try {
-        let response = await BlogPost.createPost(this.formData);
+        let response = await BlogPost.editPost(this.slug, this.formData);
         if (response.status === 200) {
           this.$router.push({
             name: "post",

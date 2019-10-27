@@ -40,6 +40,7 @@ class BlogPostController extends Controller
             "title" => "string | required",
             "summary" => "string | required",
             "content" => "string | required",
+            "markdown" => "string | required",
             "images" => "array | max:30",
             "images.*" => "image | mimes:gif,jpeg,png,bmp,jpg|max:20000",
             "headerImageName" => "nullable | string",
@@ -54,14 +55,16 @@ class BlogPostController extends Controller
         "title" => $request->title,
         "summary" => $request->summary,
         "content" => "",
+        "markdown" => $request->markdown,
         "header_image_url" => "",
-        "is_draft" => $request->saveAsDraft
+        "is_draft" => $request->saveAsDraft,
+        "url_name_map" => []
       ]);
 
       $content = $request->content;
       $headerImageUrl = "";
+      $urlMap = [];
       if($request->images) {
-        $urlMap = [];
         $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . env("APP_ENV", "local") . "/" . $blogPost->slug;
         $uploadOptions = [
           "folder" => $uploadFolder
@@ -86,6 +89,7 @@ class BlogPostController extends Controller
       }
       $blogPost->content = $content;
       $blogPost->header_image_url = $headerImageUrl;
+      $blogPost->url_name_map = $urlMap;
       $blogPost->save();
 
       return response()->json(["slug" => $blogPost->slug]);
@@ -111,6 +115,27 @@ class BlogPostController extends Controller
     }
 
     /**
+     * Display the specified resource for editing.
+     *
+     * @param  \App\BlogPost  $blogPost
+     * @return \Illuminate\Http\Response
+     */
+    public function showEdit(BlogPost $blogPost)
+    {
+      // todo test fail condition
+      $formattedResponse = [
+        "title" => $blogPost->title,
+        "summary" => $blogPost->summary,
+        "markdown" => $blogPost->markdown,
+        "urlMap" => $blogPost->url_name_map,
+        "header_image_url" => $blogPost->header_image_url,
+        "created_at" => $blogPost->created_at
+      ];
+      return response()->json($formattedResponse);
+    }
+
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -119,7 +144,56 @@ class BlogPostController extends Controller
      */
     public function update(Request $request, BlogPost $blogPost)
     {
-        //
+      $validator = Validator::make(
+        $request->all(),
+        [
+            "title" => "string | required",
+            "summary" => "string | required",
+            "content" => "string | required",
+            "markdown" => "string | required",
+            "images" => "array | max:30",
+            "images.*" => "image | mimes:gif,jpeg,png,bmp,jpg|max:20000",
+            "headerImageName" => "nullable | string",
+        ]
+      );
+      if ($validator->fails()) {
+        return response()->json($validator->errors(), JsonResponse::HTTP_BAD_REQUEST);
+      }
+      $blogPost->title = $request->title;
+      $blogPost->summary = $request->summary;
+      $blogPost->markdown = $request->markdown;
+
+      $urlMap = $blogPost->url_map;
+      $content = $request->content;
+      if($request->images) {
+        $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . env("APP_ENV", "local") . "/" . $blogPost->slug;
+        $uploadOptions = [
+          "folder" => $uploadFolder
+        ];
+        foreach ($request->images as $image) {
+          try {
+            $clientImageName = $image->getClientOriginalName();
+            if (array_key_exists($clientImageName, $urlMap)) {
+              continue;
+            }
+            Cloudder::upload($image->getRealPath(), null, $uploadOptions);  
+            $uploadedResult = Cloudder::getResult();
+            $cloudinaryURL = $uploadedResult["secure_url"];  
+            $urlMap[$clientImageName] = $cloudinaryURL;    
+          } catch (\Exception $exception) {
+            \Log::error("Image upload failed");
+            \Log::error($exception);
+          }
+        }
+        // Convert image names to cloudinary urls
+        $content = strtr($request->content, $urlMap);
+        $headerImageIsCloudinary = strpos($request->headerImageName, "cloudinary") !== false;
+        if (!$headerImageIsCloudinary && $request->headerImageName) {
+          $blogPost->header_image_url = $urlMap[$request->headerImageName] ?? "";
+        }
+        $blogPost->url_map = $urlMap;
+        $blogPost->save();
+      }
     }
 
     /**

@@ -15,15 +15,20 @@ export default class BlogPost {
     return axios.get(`${blogPostURL}/${slug}`);
   }
 
+  static getEditPost(slug) {
+    return axios.get(`${blogPostURL}/edit/${slug}`);
+  }
+
   static createPost(formData) {
     let headers = this.getAuthHeader();
     headers['content-type'] = 'multipart/form-data';
     return axios.post(blogPostURL, formData, {headers:headers});
   }
 
-  static editPost(post) {
-    // todo parse params
-    return axios.put(blogPostURL, {}, {headers:this.getAuthHeader()});
+  static editPost(slug, formData) {
+    let headers = this.getAuthHeader();
+    headers['content-type'] = 'multipart/form-data';
+    return axios.put(`${blogPostURL}/${slug}`, formData, {headers:headers});
   }
 
   static deletePost(slug) {

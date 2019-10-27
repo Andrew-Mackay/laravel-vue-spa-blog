@@ -30,15 +30,6 @@ Route::group([
   Route::post('me', 'AuthController@me');
 });
 
-Route::group([
-
-  'prefix' => 'blog-post'
-
-], function ($router) {
-  Route::get('index', 'BlogPostController@index');
-  Route::get('{blogPost}', 'BlogPostController@show');
-});
-
 // todo check middleware actually works
 Route::group([
 
@@ -46,8 +37,9 @@ Route::group([
   'prefix' => 'blog-post'
 
 ], function ($router) {
+  Route::get('edit/{blogPost}', 'BlogPostController@showEdit');
   Route::post('', 'BlogPostController@store');
-  Route::put('', 'BlogPostController@update');
+  Route::put('{blogPost}', 'BlogPostController@update');
   Route::delete('{blogPost}', 'BlogPostController@destroy');
   Route::group(
     ['prefix' => 'drafts'],
@@ -57,3 +49,13 @@ Route::group([
     }
   );
 });
+
+Route::group([
+
+  'prefix' => 'blog-post'
+
+], function ($router) {
+  Route::get('index', 'BlogPostController@index');
+  Route::get('{blogPost}', 'BlogPostController@show');
+});
+

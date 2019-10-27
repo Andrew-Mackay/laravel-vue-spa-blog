@@ -11,8 +11,12 @@ class BlogPost extends Model
     use HasSlug;
 
     protected $fillable = [
-      "title", "summary", "content", "header_image_url", "is_draft"
+      "title", "summary", "content", "header_image_url", "is_draft", "markdown", "url_name_map"
     ];
+
+    protected $casts = [
+      'url_name_map' => 'json',
+  ];
 
     public function user()
     {
