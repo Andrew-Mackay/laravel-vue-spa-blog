@@ -1,4 +1,5 @@
 const blogPostURL = '/api/blog-post';
+const draftsURL = `${blogPostURL}/drafts`;
 
 export default class BlogPost {
   static getAuthHeader() {
@@ -27,5 +28,13 @@ export default class BlogPost {
 
   static deletePost(slug) {
     return axios.delete(`${blogPostURL}/${slug}`, {headers:this.getAuthHeader()});
+  }
+
+  static getDraftPosts() {
+    return axios.get(`${draftsURL}/index`, {headers: this.getAuthHeader()});
+  }
+
+  static publishDraft(slug) {
+    return axios.put(`${draftsURL}/${slug}`, {headers: this.getAuthHeader()});
   }
 }

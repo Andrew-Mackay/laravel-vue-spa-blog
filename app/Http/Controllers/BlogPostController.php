@@ -140,4 +140,20 @@ class BlogPostController extends Controller
         }
         return response()->json(["success" => $blogPostDeleted]);
     }
+
+    // ------ Section for controllers to handle draft Posts ------
+
+    public function getDrafts() 
+    {
+      $posts = BlogPost::where("is_draft", true)->select("slug", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
+      return response()->json(["posts" => $posts]);
+    }
+
+    public function publishDraft(BlogPost $blogPost)
+    {
+      $blogPost->is_draft = false;
+      $blogPost->save();
+    }
+
+    // ----- End of draft posts section -----
 }

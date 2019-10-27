@@ -1,16 +1,16 @@
 <template>
   <div class="app">
     <div class="navbar">
-      <div>
+      <div class="navbar-item">
         <router-link tag="li" to="/">{{ appName }}</router-link>
       </div>
-      <div>
+      <div class="navbar-item">
         <router-link tag="li" to="/about">About</router-link>
       </div>
-      <div>
+      <div class="navbar-item">
         <router-link v-if="isLoggedIn && !tokenExpired" tag="li" to="/post/new">New Post</router-link>
       </div>
-      <div>
+      <div class="navbar-item">
         <router-link v-if="isLoggedIn && !tokenExpired" tag="li" to="/posts/manage">Manage Posts</router-link>
       </div>
     </div>
@@ -44,11 +44,11 @@ export default {
     list-style-type: none;
     margin-bottom: 20px;
   }
-  .navbar div {
+  .navbar-item {
     margin-right: 20px;
     text-decoration: underline;
   }
-  .navbar div :hover {
+  .navbar-item :hover {
     color: rgb(201, 38, 9);
   }
 </style>

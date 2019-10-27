@@ -49,4 +49,11 @@ Route::group([
   Route::post('', 'BlogPostController@store');
   Route::put('', 'BlogPostController@update');
   Route::delete('{blogPost}', 'BlogPostController@destroy');
+  Route::group(
+    ['prefix' => 'drafts'],
+    function ($router) {
+      Route::get('index', 'BlogPostController@getDrafts');
+      Route::put('{blogPost}', 'BlogPostController@publishDraft');
+    }
+  );
 });

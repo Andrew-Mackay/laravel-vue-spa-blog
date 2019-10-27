@@ -1,12 +1,21 @@
 <template>
     <div>
-      <div v-if="loaded" class="posts-container">
-        <template v-for="post in posts">
+      <div>
+        <button :disabled="!showingDrafts" @click="showingDrafts=false;">Published Posts ({{ numberOfPublishedPosts }})</button>
+        <button :disabled="showingDrafts" @click="showingDrafts=true;">Draft Posts ( {{ numberOfDraftPosts }})</button>
+      </div>
+      <div v-if="loadedPublished" class="publishedPosts-container">
+        <template v-for="post in postsToShow">
           <div class="post" v-bind:key="post.slug">
             <div>Title: "{{ post.title }}"</div>
             <div>Created: {{ post.created_at }}</div>
             <button @click="editPost(post.slug)">Edit</button>
-            <button @click="deletePost(post.slug)">Delete</button>
+            <template v-if="!showingDrafts">
+              <button @click="deletePost(post.slug)">Delete</button>
+            </template>
+            <template v-else>
+              <button @click="publishPost(post.slug)">Publish</button>
+            </template>
           </div>
         </template>
       </div>
@@ -22,24 +31,50 @@ import BlogPost from '@/js/services/BlogPost.service.js';
 export default {
   data() {
     return {
-      posts: [],
-      loaded: false
+      publishedPosts: [],
+      draftPosts: [],
+      loadedPublished: false,
+      loadedDrafts: false,
+      showingDrafts: false
     }
   },
   mounted() {
-      this.getPosts();
+      this.getpublishedPosts();
+      this.getDrafts();
+  },
+  computed: {
+    numberOfPublishedPosts:function () {
+      return this.publishedPosts.length;
+    },
+    numberOfDraftPosts: function () {
+      return this.draftPosts.length;
+    },
+    postsToShow: function () {
+      return this.showingDrafts ? this.draftPosts : this.publishedPosts;
+    }
   },
   methods: {
-    async getPosts() {
+    async getpublishedPosts() {
       try {
         let response = await BlogPost.getPosts();
         if(response.status === 200) {
-          this.posts = response.data.posts;
+          this.publishedPosts = response.data.posts;
         }
       } catch(error){
         console.log("Error:", error)
       }
-      this.loaded = true;
+      this.loadedPublished = true;
+    },
+    async getDrafts () {
+      try {
+        let response = await BlogPost.getDraftPosts();
+        if(response.status === 200) {
+          this.draftPosts = response.data.posts;
+        }
+      } catch(error){
+        console.log("Error:", error)
+      }
+      this.loadedDrafts = true;
     },
     async deletePost(slug) {
       let confirmedDelete = confirm(`Are you sure you want to delete this post? [${slug}]`);
@@ -57,19 +92,30 @@ export default {
       }
       if (deletedSuccessfully) {
         // remove post from list
-        this.posts = this.posts.filter(post => post.slug !== slug);
+        this.publishedPosts = this.publishedPosts.filter(post => post.slug !== slug);
       } else {
         alert("Failed to delete post.");
       }
     },
     editPost(slug) {
       // todo redirect
+    },
+    //todo error handling 
+    async publishPost(slug) {
+      let confirmedPublish = confirm(`Are you sure you want to publish this post? [${slug}]`);
+      if (!confirmedPublish || !this.showingDrafts) {
+        return;
+      }
+      await BlogPost.publishDraft(slug);
+      let publishedPost = this.draftPosts.filter(post => post.slug === slug)[0];
+      this.draftPosts = this.draftPosts.filter(post => post.slug !== slug);
+      this.publishedPosts.push(publishedPost);
     }
   }
 }
 </script>
 <style scoped>
-  .posts-container {
+  .publishedPosts-container {
     display: flex;
     flex-direction: column;
     margin-left: 20px;
