@@ -38,8 +38,8 @@ Route::group([
 
 ], function ($router) {
   Route::get('edit/{blogPost}', 'BlogPostController@showEdit');
+  Route::post('update/{blogPost}', 'BlogPostController@update'); //should be "PUT" request but does not work with multipart/formdata
   Route::post('', 'BlogPostController@store');
-  Route::put('{blogPost}', 'BlogPostController@update');
   Route::delete('{blogPost}', 'BlogPostController@destroy');
   Route::group(
     ['prefix' => 'drafts'],

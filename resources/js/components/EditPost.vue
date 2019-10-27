@@ -88,7 +88,6 @@ export default {
   },
   async mounted() {
     let post = await this.getPost(this.$route.params.slug);
-    console.log(post);
     this.title = post.title;
     this.summary = post.summary;
     this.headerImage = post.header_image_url;
@@ -118,6 +117,8 @@ export default {
       this.formData.append("headerImageName", this.headerImageName);
       this.formData.append("summary", this.summary);
       this.formData.append("content", this.compileMarkdownContentToHTML());
+      this.formData.append("markdown", this.content);
+
       try {
         let response = await BlogPost.editPost(this.slug, this.formData);
         if (response.status === 200) {

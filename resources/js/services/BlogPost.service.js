@@ -28,7 +28,7 @@ export default class BlogPost {
   static editPost(slug, formData) {
     let headers = this.getAuthHeader();
     headers['content-type'] = 'multipart/form-data';
-    return axios.put(`${blogPostURL}/${slug}`, formData, {headers:headers});
+    return axios.post(`${blogPostURL}/update/${slug}`, formData, {headers:headers});
   }
 
   static deletePost(slug) {

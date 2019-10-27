@@ -162,8 +162,7 @@ class BlogPostController extends Controller
       $blogPost->title = $request->title;
       $blogPost->summary = $request->summary;
       $blogPost->markdown = $request->markdown;
-
-      $urlMap = $blogPost->url_map;
+      $urlMap = $blogPost->url_name_map;
       $content = $request->content;
       if($request->images) {
         $uploadFolder = self::CLOUDINARY_UPLOAD_FOLDER . env("APP_ENV", "local") . "/" . $blogPost->slug;
@@ -185,15 +184,16 @@ class BlogPostController extends Controller
             \Log::error($exception);
           }
         }
-        // Convert image names to cloudinary urls
-        $content = strtr($request->content, $urlMap);
-        $headerImageIsCloudinary = strpos($request->headerImageName, "cloudinary") !== false;
-        if (!$headerImageIsCloudinary && $request->headerImageName) {
-          $blogPost->header_image_url = $urlMap[$request->headerImageName] ?? "";
-        }
-        $blogPost->url_map = $urlMap;
-        $blogPost->save();
       }
+      // Convert image names to cloudinary urls
+      $content = strtr($request->content, $urlMap);
+      $headerImageIsCloudinary = strpos($request->headerImageName, "cloudinary") !== false;
+      if (!$headerImageIsCloudinary && $request->headerImageName) {
+        $blogPost->header_image_url = $urlMap[$request->headerImageName] ?? "";
+      }
+      $blogPost->url_name_map = $urlMap;
+      $blogPost->save();
+      return response()->json(["slug" => $blogPost->slug]); 
     }
 
     /**
@@ -215,8 +215,6 @@ class BlogPostController extends Controller
         return response()->json(["success" => $blogPostDeleted]);
     }
 
-    // ------ Section for controllers to handle draft Posts ------
-
     public function getDrafts() 
     {
       $posts = BlogPost::where("is_draft", true)->select("slug", "title", "summary", "header_image_url", "created_at")->orderBy('created_at', 'desc')->get();
@@ -228,6 +226,4 @@ class BlogPostController extends Controller
       $blogPost->is_draft = false;
       $blogPost->save();
     }
-
-    // ----- End of draft posts section -----
 }
