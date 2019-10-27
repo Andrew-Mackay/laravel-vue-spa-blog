@@ -70,8 +70,7 @@ export default {
       content: "",
       showPreview: false,
       images: [],
-      IMAGE_TYPES_ACCEPTED:
-        "image/gif,image/jpeg,image/png,image/bmp,image/jpg",
+      IMAGE_TYPES_ACCEPTED: "image/gif,image/jpeg,image/png,image/bmp,image/jpg",
       MAX_NUMBER_OF_IMAGES: 30,
       formData: new FormData(),
       imageSrcMaps: {},
@@ -94,6 +93,27 @@ export default {
     this.slug = this.$route.params.slug;
     this.content = post.markdown;
     this.imageSrcMaps = post.urlMap;
+
+    // Set images in image upload modal
+    let highlighted = false;
+    for (let name of Object.keys(post.urlMap)){
+      let isHeaderImage = false;
+      if (this.headerImage === post.urlMap[name]) {
+        this.headerImageName = name;
+        isHeaderImage = true;
+      }
+      let highlight = false;
+      if (!highlighted && !isHeaderImage) {
+        highlight = true;
+        highlighted = true;
+      }
+      this.images.push({
+        name: name,
+        path: post.urlMap[name],
+        highlight: highlight,
+        default: isHeaderImage
+      })
+    }
   },
   methods: {
     async getPost(slug) {
