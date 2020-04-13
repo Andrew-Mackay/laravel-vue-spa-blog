@@ -3,7 +3,7 @@
 ## Overview
 This is an individual blogging website that allows the user to create blog posts using a markdown editor with support for images. 
 
-To create a new blog post the logged in user clicks on the 'New Post' button. This navigates to the new post screen where the user provides the title, summary and adds the content of the blog post using markdown and the included image manager. Of the uploaded images, the user can specify which image should be used as the header image. During editing the post can be instaly previewed by clicking the 'preview' button. During creation the post can either be saved as a draft or can be published immediately. 
+To create a new blog post the logged in user clicks on the 'New Post' button. This navigates to the new post screen where the user provides the title, summary and adds the content of the blog post using markdown and the included image manager. Of the uploaded images, the user can specify which image should be used as the header image. During editing the post can be instantly previewed by clicking the 'preview' button. During creation the post can either be saved as a draft or can be published immediately. 
 
 To manage published and draft posts the user can click on the 'mange posts' button. Here, the user can edit or delete existing posts and publish any posts that are saved as a draft.
 
@@ -66,3 +66,16 @@ If you are using Windows 10 Home edition you will need to use Docker-toolbox. Th
 - Run `npm install -g cross-env`
 - Add `innodb_use_native_aio=0` to `laradock/mysql/my.conf` under the section `mysqld`
 - Navigate to the IP address of the default machine that docker uses in your browser instead of `localhost`  
+
+### Possible Next Steps
+Although I will no longer be continuing this project, here is a list of possible next steps that could be added to improve the site:
+- comment section on posts
+- 'like' system mechanic
+- infinite scroll list of posts so they are not all loaded at once
+- markdown editor improvements
+    - The current editor requires the user to know markdown, one possible improvement would be to add dedicated buttons for the most common markdown features such as bold, italics, horizontal rule and font sizes
+- share post to social media buttons
+- 'back to posts' button to navigate from the current blog post you are reading to the list of all blog posts
+- estimated read times
+- recording of stats such as total site views and individual post views
+- general stylistic improvements to make the site more aesthetically pleasing
