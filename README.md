@@ -26,12 +26,22 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
     - `composer install`
     - `php artisan migrate:refresh`
     - `npm install`
+
+6) From within the workspace create a new user:
+    - `php artisan tinker`
+        - `$user = new App\User();`
+        - `$user->password = Hash::make('your-password');`
+        - `$user->email = 'your-email@example.com';`
+        - `$user->name = 'Your Name';`
+        - `$user->save();`
+
+7) From within the workspace run:
     - `npm run watch` 
         - If this does not automatically rebuild when you make changes, run `npm run watch-poll` instead
 
-6) Open a browser and navigate to `localhost`
+8) Open a browser and navigate to `localhost`
 
-7) When finished, shutdown the docker containers with the command:  
+9) When finished, shutdown the docker containers with the command:  
 
     `docker-compose down`
 
