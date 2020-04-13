@@ -1,7 +1,9 @@
 # Laravel + Vue SPA Blog
 
 ## Overview
-This is an individual blogging website that allows the user to create blog posts using a markdown editor with support for images. 
+This is an individual blogging website that allows the user to create blog posts using a markdown editor with support for images.
+
+To login, manually navigate to `/login` and enter your credentials (see `Getting Started` section of README to see how to create a new user).
 
 To create a new blog post the logged in user clicks on the 'New Post' button. This navigates to the new post screen where the user provides the title, summary and adds the content of the blog post using markdown and the included image manager. Of the uploaded images, the user can specify which image should be used as the header image. During editing the post can be instantly previewed by clicking the 'preview' button. During creation the post can either be saved as a draft or can be published immediately. 
 
@@ -12,7 +14,7 @@ The published blog posts are displayed in a list format on the home page with a 
 The site also includes an about section to provide an overview of the blog.
 
 ## Technology
-The backend of this project uses the [Laravel](https://laravel.com/) PHP framework whilst the frontend utilizes the [Vue.js](https://vuejs.org/) JavaScript framework. The project has been containerized using [Docker](https://www.docker.com/) with the aid of the [Laradock](https://laradock.io/) project.
+The backend of this project uses the [Laravel](https://laravel.com/) PHP framework whilst the frontend utilizes the [Vue.js](https://vuejs.org/) JavaScript framework. The project has been containerized using [Docker](https://www.docker.com/) with the aid of the [Laradock](https://laradock.io/) project. To store blog images, [Cloudinary](https://cloudinary.com/) is used. This will require you to sign up for an account (free).
 
 ## Getting Started
 
@@ -22,7 +24,24 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
 
     - `git clone --recurse-submodules git@github.com:Andrew-Mackay/k_blog.git`
 
-2) Obtain a copy of the laravel `.env` and laradock `.env`
+2) Configure env:
+    - Laravel
+        1) Create a new `.env` file from the `.env.example` template
+        2) Set the following fields:
+            - `APP_NAME` to the name of your blog
+            - `DB_DATABASE` to match whatever you enter in your laradock env
+            - `DB_USERNAME` to match whatever you enter in your laradock env
+            - `DB_PASSWORD` to match whatever you enter in your laradock env
+            - `CLOUDINARY_API_KEY` from your cloudinary account
+            - `CLOUDINARY_API_SECRET` from your cloudinary account
+            - `CLOUDINARY_CLOUD_NAME` from your cloudinary account
+    - Laradock
+        1) Create a new `.env` file from the `env-example` template
+        2) Set the followng fields:
+            - `MYSQL_DATABASE` to match `DB_DATABASE` from your laravel env 
+            - `MYSQL_USER` to match `DB_USERNAME` from your laravel env 
+            - `MYSQL_PASSWORD` to match `DB_PASSWORD` from your laravel env 
+            - `MYSQL_ROOT_PASSWORD`
 
 3) From within the laradock folder, start the docker containers with the command:
 
@@ -55,8 +74,7 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
 8) Open a browser and navigate to `localhost`
 
 9) When finished, shutdown the docker containers with the command:  
-
-    `docker-compose down`
+    - `docker-compose down`
 
 ### Windows 10 Home Workaround
 
