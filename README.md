@@ -22,7 +22,7 @@ The backend of this project uses the [Laravel](https://laravel.com/) PHP framewo
 
 1) Clone the repository and laradock submodule:
 
-    - `git clone --recurse-submodules git@github.com:Andrew-Mackay/k_blog.git`
+    - `git clone --recurse-submodules git@github.com:Andrew-Mackay/laravel-vue-spa-blog.git`
 
 2) Configure env:
     - Laravel
